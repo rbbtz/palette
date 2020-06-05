@@ -1,5 +1,9 @@
 import React, { Component } from "react"
-import { TouchableWithoutFeedback } from "react-native"
+import {
+  TouchableWithoutFeedback,
+  TouchableWithoutFeedbackProps,
+} from "react-native"
+import Haptic, { HapticFeedbackTypes } from "react-native-haptic-feedback"
 import { animated, Spring } from "react-spring/renderprops-native.cjs"
 import styled from "styled-components/native"
 import { themeProps } from "../../Theme"
@@ -118,6 +122,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
       disabled,
       inline,
       longestText,
+      haptic,
       ...rest
     } = this.props
     const { px, size, height } = this.getSize()
@@ -132,7 +137,8 @@ export class Button extends Component<ButtonProps, ButtonState> {
     return (
       <Spring native from={from} to={to}>
         {props => (
-          <TouchableWithoutFeedback
+          <Touchable
+            haptic={haptic}
             onPress={this.onPress}
             onPressIn={() => {
               this.setState({
@@ -174,7 +180,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
                 )}
               </AnimatedContainer>
             </Flex>
-          </TouchableWithoutFeedback>
+          </Touchable>
         )}
       </Spring>
     )
@@ -207,3 +213,25 @@ const Container = styled(Box)<ButtonProps>`
 `
 
 const AnimatedContainer = animated(Container)
+
+interface Props extends TouchableWithoutFeedbackProps {
+  haptic?: HapticFeedbackTypes | true
+}
+
+/**
+ * `haptic` can be used like:
+ * <Touchable haptic />
+ * or
+ * <Touchable haptic="impactHeavy" />
+ */
+export const Touchable: React.FC<Props> = ({ haptic, onPress, ...rest }) => (
+  <TouchableWithoutFeedback
+    {...rest}
+    onPress={event => {
+      if (haptic !== undefined) {
+        Haptic.trigger(haptic === true ? "impactLight" : haptic)
+      }
+      onPress(event)
+    }}
+  />
+)

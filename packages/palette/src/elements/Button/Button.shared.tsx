@@ -1,4 +1,5 @@
 import { ReactNode } from "react"
+import { HapticFeedbackTypes } from "react-native-haptic-feedback"
 import { css } from "styled-components"
 import { themeProps } from "../../Theme"
 import { BoxProps } from "../Box"
@@ -31,6 +32,8 @@ export interface ButtonProps extends ButtonBaseProps {
   variant?: ButtonVariant
   /** React Native only, Callback on press, use instead of onClick */
   onPress?: (e) => void
+  /** React Native only, used to provide haptic feedback on press */
+  haptic?: HapticFeedbackTypes | true
 }
 
 export interface ButtonBaseProps extends BoxProps {
