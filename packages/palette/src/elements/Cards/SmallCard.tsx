@@ -1,4 +1,5 @@
 import React from "react"
+import { space } from "../../helpers"
 import { Box } from "../Box"
 import { Flex } from "../Flex"
 import { Image } from "../Image"
@@ -76,7 +77,12 @@ export const SmallCard: React.FC<SmallCardProps> = ({
           {subtitle}
         </Sans>
       )}
-      {!!tag && <CardTag {...tag} />}
+      {!!tag && (
+        <CardTag
+          {...tag}
+          style={{ position: "absolute", top: space(1), left: space(1) }}
+        />
+      )}
     </Box>
   )
 }
